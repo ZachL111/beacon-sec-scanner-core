@@ -1,0 +1,10 @@
+{
+  "name": "zachl111/beacon-sec-scanner-core",
+  "description": "Implement a PHP security tooling project for scanner constraint solving, using bounded scenario files and conflict explanations.",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Portfolio\\": "src/"
+    }
+  }
+}
