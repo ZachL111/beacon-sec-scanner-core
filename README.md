@@ -1,68 +1,40 @@
 # beacon-sec-scanner-core
 
-`beacon-sec-scanner-core` is a PHP project for Security tooling. It turns implement a PHP security tooling project for scanner constraint solving, using bounded scenario files and conflict explanations into a small local model with readable fixtures and a direct verification command.
-
-## Reading Beacon Sec Scanner Core
-
-Start with the README, then open `metadata/project.json` to check the constants behind the examples. After that, `fixtures/cases.csv` shows the compact path and `examples/extended_cases.csv` gives a wider look at the same rule.
-
-## Design Sketch
-
-The project is organized around a compact model rather than a large framework. Inputs are scored, classified, and checked against golden fixtures. The constants live in code and are mirrored in metadata so documentation drift is easy to catch. The PHP implementation uses strict types and a small namespaced policy class.
+`beacon-sec-scanner-core` is a PHP project in security tooling. Its focus is to implement a PHP security tooling project for scanner constraint solving, using bounded scenario files and conflict explanations.
 
 ## Purpose
 
-The repository exists to keep a technical idea small enough to reason about. The implementation avoids external dependencies where possible, then uses fixtures to make changes easy to review.
+I want this repository to be useful as a quick reading exercise: fixtures first, implementation second, verifier last.
 
-## What It Does
+## Beacon Sec Scanner Core Review Notes
 
-- Uses fixture data to keep policy checks changes visible in code review.
-- Includes extended examples for replay guards, including `surge` and `degraded`.
-- Documents claim validation tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
+For a quick review, compare `trust boundary` with `replay exposure` before reading the middle cases.
 
-## Fixture Notes
+## What Is Covered
 
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
+- `fixtures/domain_review.csv` adds cases for trust boundary and claim drift.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/beacon-sec-scanner-walkthrough.md` walks through the case spread.
+- The PHP code includes a review path for `trust boundary` and `replay exposure`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Files Worth Reading
+## Implementation Notes
 
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
+The implementation keeps the scoring rule plain: reward signal and confidence, preserve slack, penalize drag, then classify the result into a review lane.
 
-## Setup
+The PHP addition stays small enough to inspect in one sitting.
 
-The only required setup is the local PHP toolchain. After cloning, stay in the repo root so fixture paths resolve correctly.
-
-## Usage
+## Command
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Audit Path
 
-## Verification
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
-
-The audit command checks repository structure and README constraints before it delegates to the verifier.
+The same command runs the local verification path. The highest-scoring domain case is `stale` at 217, which lands in `ship`. The most cautious case is `edge` at 103, which lands in `hold`.
 
 ## Limits
 
-The scoring model is simple by design. More domain-specific behavior should be added through explicit adapters or extra fixture classes rather than hidden constants.
-
-## Next Directions
-
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add one more security tooling fixture that focuses on a malformed or borderline input.
+The repository is intentionally scoped to local checks. I would expand it by adding adversarial fixtures before adding features.
