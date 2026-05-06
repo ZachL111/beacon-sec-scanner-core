@@ -1,0 +1,17 @@
+{
+  "repo": "beacon-sec-scanner-core",
+  "thresholds": {
+    "signal": 2,
+    "slack": 1,
+    "confidence": 1,
+    "drag": 5,
+    "ship": 166,
+    "watch": 112
+  },
+  "terms": [
+    "trust boundary",
+    "claim drift",
+    "replay exposure",
+    "policy width"
+  ]
+}
